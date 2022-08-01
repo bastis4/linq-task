@@ -24,34 +24,27 @@ public static class LinqPractice
         DisplayMessage<string> printNumberWords;
         printNumberWords = PrintToConsole;
 
-
         arr1.ForEachEven(PrintToConsole); // Должно вывести на консоль 2, 4
         arr2.ForEachOdd(PrintToConsole); // Должно вывести на консоль one, three
     }
-
     public static void PrintToConsole<T>(this List<T> numbers)
     {
         numbers.ForEach(x => Console.WriteLine(x));
     }
-
     public static void ForEachEven(this int[] numbers, DisplayMessage<int> printNumberDigits)
     {
         var evenNumberDigits = (from x in numbers where x % 2 == 0 select x).ToList();
         printNumberDigits(evenNumberDigits);
-
     }
-
     public static void ForEachOdd(this string[] numbers, DisplayMessage<string> printNumberWords)
     {
         var evenNumberWords = wordsToNumbers
             .Where(x => numbers.Contains(x.Key) && x.Value % 2 != 0)
             .ToDictionary(t => t.Value, t => t.Key).Values
             .ToList();
-        
+        printNumberWords(evenNumberWords);
         /*var evenNumberWords = (((from x in wordsToNumbers
                                  join y in numbers on x.Key equals y
                                  select (y, x.Value)).Where(x => x.Value % 2 != 0)).ToDictionary(y => y.Value, x => x.y)).Values.ToList();*/
-        
-        printNumberWords(evenNumberWords);
     }
 }
