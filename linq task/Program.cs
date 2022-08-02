@@ -6,13 +6,6 @@ public static class LinqPractice
 {
     public delegate void DisplayMessage<T>(List<T> numbers);
 
-    private static Dictionary<string, int> wordsToNumbers = new Dictionary<string, int>
-        {{"zero",0},{"one",1},{"two",2},{"three",3},{"four",4},
-        {"five",5},{"six",6},{"seven",7},{"eight",8},{"nine",9},
-        {"ten",10},{"eleven",11},{"twelve",12},{"thirteen",13},
-        {"fourteen",14},{"fifteen",15},{"sixteen",16},
-        {"seventeen",17},{"eighteen",18},{"nineteen",19},{"twenty",20}};
-
     public static void Main()
     {
         var arr1 = new int[] { 1, 2, 3, 4 };
@@ -33,18 +26,21 @@ public static class LinqPractice
     }
     public static void ForEachEven(this int[] numbers, DisplayMessage<int> printNumberDigits)
     {
-        var evenNumberDigits = (from x in numbers where x % 2 == 0 select x).ToList();
+        var evenNumberDigits = numbers.Where(x => x % 2 == 0).ToList();
         printNumberDigits(evenNumberDigits);
     }
     public static void ForEachOdd(this string[] numbers, DisplayMessage<string> printNumberWords)
     {
-        var evenNumberWords = wordsToNumbers
-            .Where(x => numbers.Contains(x.Key) && x.Value % 2 != 0)
-            .ToDictionary(t => t.Value, t => t.Key).Values
-            .ToList();
+        /*var evenNumberWords = numbers
+            .Select((v, i) => new { Index = i, Value = v })
+            .Where(p => (p.Index + 1) % 2 != 
+        0)
+            .Select(p => p.Value).ToList();*/
+        
+        var evenNumberWords = Enumerable.Range(0, numbers.Length)
+                 .Where(i => (i + 1) % 2 != 0)
+                 .Select(i => numbers[i])
+                 .ToList();
         printNumberWords(evenNumberWords);
-        /*var evenNumberWords = (((from x in wordsToNumbers
-                                 join y in numbers on x.Key equals y
-                                 select (y, x.Value)).Where(x => x.Value % 2 != 0)).ToDictionary(y => y.Value, x => x.y)).Values.ToList();*/
     }
 }
